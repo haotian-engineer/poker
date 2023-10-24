@@ -17,10 +17,12 @@ import {
 import authContext from '../auth/authContext';
 import socketContext from '../websocket/socketContext';
 import GameContext from './gameContext';
+import globalContext from '../global/globalContext';
 
 const GameState = ({ history, children }) => {
   const { socket } = useContext(socketContext);
   const { loadUser } = useContext(authContext);
+  const { setTables } = useContext(globalContext);
 
   const [messages, setMessages] = useState([]);
   const [currentTable, setCurrentTable] = useState(null);
@@ -72,6 +74,7 @@ const GameState = ({ history, children }) => {
       socket.on(TABLE_LEFT, ({ tables, tableId }) => {
         console.log(TABLE_LEFT, tables, tableId);
         setCurrentTable(null);
+        setTables(tables)
         loadUser(localStorage.token);
         setMessages([]);
       });

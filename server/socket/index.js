@@ -55,10 +55,12 @@ function getCurrentTables() {
     smallBlind: table.minBet,
     bigBlind: table.minBet * 2,
   }));
+  console.log("fetchedTables", fetchedTables)
   const result = [];
   fetchedTables.filter((table, id) => {
     if(table.players) result.push(table)
   })
+  console.log("result", result)
   return result
 }
 
@@ -101,8 +103,6 @@ const init = (socket, io) => {
         socketId: socket.id,
       }
 
-      console.log("data", data)
-
       socket.emit(RECEIVE_LOBBY_INFO, data);
       socket.broadcast.emit(PLAYERS_UPDATED, getCurrentPlayers());
     }
@@ -111,7 +111,6 @@ const init = (socket, io) => {
   socket.on(CREATE_TABLE, () => {
     const tableId = Object.values(tables).length+1;
     tables[tableId] = new Table(tableId, `Table ${tableId}`, 10000)
-    console.log("create table", tables)
     const player = players[socket.id];
 
     tables[tableId].addPlayer(player);
@@ -132,9 +131,6 @@ const init = (socket, io) => {
   socket.on(JOIN_TABLE, (tableId) => {
     const table = tables[tableId];
     const player = players[socket.id];
-    console.log("TableID", tableId);
-    console.log("player", player);
-    console.log("table", table);
 
     table.addPlayer(player);
 

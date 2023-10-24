@@ -259,6 +259,8 @@ const Play = ({ history }) => {
         : setBet(currentTable.minBet));
   }, [currentTable]);
 
+  console.log("currentTable", currentTable)
+
   const handleChangeSlider = (e) => {
     setSlValue(e.target.value);
   };
@@ -386,17 +388,17 @@ const Play = ({ history }) => {
                 scale="0.60"
                 origin="bottom center"
               >
-                {messages && messages.length > 0 && (
+                {messages && messages?.length > 0 && (
                   <>
-                    <InfoPill>{messages[messages.length - 1]}</InfoPill>
+                    <InfoPill>{messages[messages?.length - 1]}</InfoPill>
                     {!isPlayerSeated && (
                       <InfoPill>Sit down to join the game!</InfoPill>
                     )}
-                    {currentTable.winMessages.length > 0 && (
+                    { currentTable.winMessages?.length > 0 && (
                       <InfoPill>
                         {
                           currentTable.winMessages[
-                            currentTable.winMessages.length - 1
+                            currentTable.winMessages?.length - 1
                           ]
                         }
                       </InfoPill>
