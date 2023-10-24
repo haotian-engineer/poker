@@ -45,7 +45,7 @@ function getCurrentPlayers() {
 }
 
 function getCurrentTables() {
-  return Object.values(tables).map((table) => ({
+  const fetchedTables = Object.values(tables).map((table) => ({
     id: table.id,
     name: table.name,
     limit: table.limit,
@@ -55,6 +55,11 @@ function getCurrentTables() {
     smallBlind: table.minBet,
     bigBlind: table.minBet * 2,
   }));
+  const result = [];
+  fetchedTables.filter((table, id) => {
+    if(table.players) result.push(table)
+  })
+  return result
 }
 
 const init = (socket, io) => {
