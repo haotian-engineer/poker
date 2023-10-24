@@ -45,7 +45,6 @@ function getCurrentPlayers() {
 }
 
 function getCurrentTables() {
-  console.log("getCurrentTable", tables)
   return Object.values(tables).map((table) => ({
     id: table.id,
     name: table.name,
@@ -71,10 +70,8 @@ const init = (socket, io) => {
 
     if (user) {
       const found = Object.values(players).find((player) => {
-        console.log("player", player);
         return player.id == user.id;
       });
-      console.log("found", found);
 
       if (found) {
         delete players[found.socketId];

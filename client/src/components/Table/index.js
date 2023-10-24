@@ -113,12 +113,9 @@ const GameTable = (props) => {
 
   const joinGame = (tableId) => {
     if(socket && tableId) {
-      console.log("props.tableData", props.tableData)
       joinTable(tableId)
       history.push("/play")
     }
-    else
-      console.log("out")
   }
 
 
@@ -134,7 +131,6 @@ const GameTable = (props) => {
       </TableHeader>
       <TableBody>
         {props.tableData.map((item, idx) => {
-          console.log("item", item)
           return (
             <TableRow
               key={idx}

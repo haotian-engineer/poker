@@ -345,7 +345,6 @@ const MainPage = ({ history }) => {
   const [tableData, setTableData] = useState(tableDataInit);
 
   useEffect(() => {
-    console.log("===Table===", tables)
     if(tables !== null)
       setTableData(tables)
   }, [tables])
