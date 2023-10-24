@@ -1,11 +1,12 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const Table = require('../pokergame/Table');
-const Player = require('../pokergame/Player');
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const Table = require("../pokergame/Table");
+const Player = require("../pokergame/Player");
 const {
   FETCH_LOBBY_INFO,
   RECEIVE_LOBBY_INFO,
   PLAYERS_UPDATED,
+  CREATE_TABLE,
   JOIN_TABLE,
   TABLE_JOINED,
   TABLES_UPDATED,
@@ -24,12 +25,15 @@ const {
   DISCONNECT,
   TABLE_UPDATED,
   WINNER,
-} = require('../pokergame/actions');
-const config = require('../config');
+} = require("../pokergame/actions");
+const config = require("../config");
 
-const tables = {
-  1: new Table(1, 'Table 1', 10000),
-};
+// const tables = {
+//   1: new Table(1, "Table 1", 10000),
+// };
+
+const tables = {}
+
 const players = {};
 
 function getCurrentPlayers() {
@@ -41,10 +45,12 @@ function getCurrentPlayers() {
 }
 
 function getCurrentTables() {
+  console.log("getCurrentTable", tables)
   return Object.values(tables).map((table) => ({
     id: table.id,
     name: table.name,
     limit: table.limit,
+    players: table.players.length,
     maxPlayers: table.maxPlayers,
     currentNumberPlayers: table.players.length,
     smallBlind: table.minBet,
@@ -65,8 +71,10 @@ const init = (socket, io) => {
 
     if (user) {
       const found = Object.values(players).find((player) => {
+        console.log("player", player);
         return player.id == user.id;
       });
+      console.log("found", found);
 
       if (found) {
         delete players[found.socketId];
@@ -76,27 +84,55 @@ const init = (socket, io) => {
         });
       }
 
-      user = await User.findById(user.id).select('-password');
+      user = await User.findById(user.id).select("-password");
 
       players[socket.id] = new Player(
         socket.id,
         user._id,
         user.name,
-        user.chipsAmount,
+        user.chipsAmount
       );
 
-      socket.emit(RECEIVE_LOBBY_INFO, {
+      const data = {
         tables: getCurrentTables(),
         players: getCurrentPlayers(),
         socketId: socket.id,
-      });
+      }
+
+      console.log("data", data)
+
+      socket.emit(RECEIVE_LOBBY_INFO, data);
       socket.broadcast.emit(PLAYERS_UPDATED, getCurrentPlayers());
     }
   });
 
+  socket.on(CREATE_TABLE, () => {
+    const tableId = Object.values(tables).length+1;
+    tables[tableId] = new Table(tableId, `Table ${tableId}`, 10000)
+    console.log("create table", tables)
+    const player = players[socket.id];
+
+    tables[tableId].addPlayer(player);
+
+    socket.emit(TABLE_JOINED, { tables: getCurrentTables(), tableId });
+    socket.broadcast.emit(TABLES_UPDATED, getCurrentTables());
+
+    if (
+      tables[tableId].players &&
+      tables[tableId].players.length > 0 &&
+      player
+    ) {
+      let message = `${player.name} joined the table.`;
+      broadcastToTable(tables[tableId], message);
+    }
+  })
+
   socket.on(JOIN_TABLE, (tableId) => {
     const table = tables[tableId];
     const player = players[socket.id];
+    console.log("TableID", tableId);
+    console.log("player", player);
+    console.log("table", table);
 
     table.addPlayer(player);
 
@@ -117,7 +153,7 @@ const init = (socket, io) => {
     const table = tables[tableId];
     const player = players[socket.id];
     const seat = Object.values(table.seats).find(
-      (seat) => seat && seat.player.socketId === socket.id,
+      (seat) => seat && seat.player.socketId === socket.id
     );
 
     if (seat && player) {
@@ -207,10 +243,10 @@ const init = (socket, io) => {
     const table = tables[tableId];
     const player = players[socket.id];
     const seat = Object.values(table.seats).find(
-      (seat) => seat && seat.player.socketId === socket.id,
+      (seat) => seat && seat.player.socketId === socket.id
     );
 
-    let message = '';
+    let message = "";
     if (seat) {
       updatePlayerBankroll(player, seat.stack);
       message = `${player.name} left the table`;
@@ -308,12 +344,12 @@ const init = (socket, io) => {
 
   function initNewHand(table) {
     if (table.activePlayers().length > 1) {
-      broadcastToTable(table, '---New hand starting in 5 seconds---');
+      broadcastToTable(table, "---New hand starting in 5 seconds---");
     }
     setTimeout(() => {
       table.clearWinMessages();
       table.startHand();
-      broadcastToTable(table, '--- New hand started ---');
+      broadcastToTable(table, "--- New hand started ---");
     }, 5000);
   }
 
@@ -322,13 +358,13 @@ const init = (socket, io) => {
     setTimeout(() => {
       table.clearSeatHands();
       table.resetBoardAndPot();
-      broadcastToTable(table, 'Waiting for more players');
+      broadcastToTable(table, "Waiting for more players");
     }, 5000);
   }
 
   function hideOpponentCards(table, socketId) {
     let tableCopy = JSON.parse(JSON.stringify(table));
-    let hiddenCard = { suit: 'hidden', rank: 'hidden' };
+    let hiddenCard = { suit: "hidden", rank: "hidden" };
     let hiddenHand = [hiddenCard, hiddenCard];
 
     for (let i = 1; i <= tableCopy.maxPlayers; i++) {

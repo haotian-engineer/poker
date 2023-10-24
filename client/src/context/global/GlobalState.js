@@ -7,7 +7,7 @@ const GlobalState = ({ children }) => {
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState(null);
   const [chipsAmount, setChipsAmount] = useState(null);
-  const [tables, setTables] = useState(null);
+  const [tables, setTables] = useState([]);
   const [players, setPlayers] = useState(null);
 
   return (

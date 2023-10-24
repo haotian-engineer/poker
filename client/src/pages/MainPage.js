@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Container from "../components/layout/Container";
 import Heading from "../components/typography/Heading";
 import styled from "styled-components";
@@ -19,6 +19,8 @@ import GameTable from "../components/Table";
 import Tabs from "../components/Tabs";
 import BottomCard from "../components/BottomCard";
 import SearchIcon from "../components/icons/SearchIcon";
+import socketContext from '../context/websocket/socketContext';
+import { CREATE_TABLE } from "../pokergame/actions";
 // import Text from "../components/typography/Text";
 
 // const MainMenuWrapper = styled.div`
@@ -236,6 +238,120 @@ const SearchInput = styled.input`
 const MainPage = ({ history }) => {
   // const { userName } = useContext(globalContext);
   // const { getLocalizedString } = useContext(contentContext);
+  const tableDataInit = [
+    {
+      count: 4,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+    {
+      count: 5,
+      name: ".50/1 NLH",
+      mode: "TexasHoldEm, NL",
+      speed: "Noarmal",
+      avg: "7.08 $",
+      wait: 0,
+      stake: "0.5$/1$",
+    },
+  ];
+
+  const { socket } = useContext(socketContext);
+  const { tables } = useContext(globalContext);
+  const [tableData, setTableData] = useState(tableDataInit);
+
+  useEffect(() => {
+    console.log("===Table===", tables)
+    if(tables !== null)
+      setTableData(tables)
+  }, [tables])
+
+
+
 
   const cardsData = [
     {
@@ -268,108 +384,6 @@ const MainPage = ({ history }) => {
     },
   ];
 
-  const tableData = [
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-    {
-      count: 5,
-      name: ".50/1 NLH",
-      mode: "TexasHoldEm, NL",
-      speed: "Noarmal",
-      avg: "7.08 $",
-      wait: 0,
-      stake: "0.5$/1$",
-    },
-  ];
-
   const bottomCardsData = [
     {
       title: "Mini",
@@ -390,6 +404,12 @@ const MainPage = ({ history }) => {
   ];
 
   // const { openModal } = useContext(modalContext);
+
+  const createGame = async () => {
+    history.push("/play")
+    socket.emit(CREATE_TABLE)
+  }
+
   useScrollToTopOnPageLoad();
   return (
     <Container
@@ -497,7 +517,7 @@ const MainPage = ({ history }) => {
                 borderRadius: "8px",
                 transform: "translate(-50%, 50%)",
               }}
-              onClick={() => history.push("/play")}
+              onClick={createGame}
             >
               Get Referal Code
             </div>

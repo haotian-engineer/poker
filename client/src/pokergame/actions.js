@@ -6,6 +6,7 @@ export const WINNER = 'WINNER';
 export const FETCH_LOBBY_INFO = 'FETCH_LOBBY_INFO';
 export const RECEIVE_LOBBY_INFO = 'RECEIVE_LOBBY_INFO';
 export const PLAYERS_UPDATED = 'PLAYERS_UPDATED';
+export const CREATE_TABLE = "CREATE_TABLE";
 export const JOIN_TABLE = 'JOIN_TABLE';
 export const TABLE_JOINED = 'TABLE_JOINED';
 export const LEAVE_TABLE = 'LEAVE_TABLE';

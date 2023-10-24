@@ -23,6 +23,7 @@ import { ReactComponent as IconStar } from "../assets/icons/star-icon.svg";
 import { ReactComponent as IconMArrorw } from "../assets/icons/multiarrow-icon.svg";
 import SwitchButton from "../components/SwitchButton";
 import { BetSlider } from "../components/game/BetSlider";
+import globalContext from "../context/global/globalContext";
 
 const PlayContainer = styled.div`
   background-image: url("${PlayBGImage}");
@@ -230,6 +231,7 @@ const Play = ({ history }) => {
     raise,
   } = useContext(gameContext);
   const { getLocalizedString } = useContext(contentContext);
+  const { tables } = useContext(globalContext);
   const [slValue, setSlValue] = useState(40);
   const [bet, setBet] = useState(0);
 
@@ -243,7 +245,7 @@ const Play = ({ history }) => {
         getLocalizedString("game_lost-connection-modal_btn-txt"),
         () => history.push("/")
       );
-    socket && joinTable(1);
+    // socket && joinTable(tables.length);
     return () => leaveTable();
     // eslint-disable-next-line
   }, [socket]);

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { ReactComponent as IconFive } from "../../assets/icons/icon-five.svg";
+import gameContext from "../../context/game/gameContext";
+import socketContext from "../../context/websocket/socketContext";
+import { useHistory } from "react-router-dom";
 
 const TableHeader = styled.div`
   margin-top: 10px;
@@ -104,6 +107,21 @@ const TableRow = styled.div`
 `;
 
 const GameTable = (props) => {
+  const history = useHistory();
+  const { joinTable } = useContext(gameContext)
+  const {socket} = useContext(socketContext)
+
+  const joinGame = (tableId) => {
+    if(socket && tableId) {
+      console.log("props.tableData", props.tableData)
+      joinTable(tableId)
+      history.push("/play")
+    }
+    else
+      console.log("out")
+  }
+
+
   return (
     <>
       <TableHeader>
@@ -116,10 +134,14 @@ const GameTable = (props) => {
       </TableHeader>
       <TableBody>
         {props.tableData.map((item, idx) => {
+          console.log("item", item)
           return (
-            <TableRow key={idx}>
+            <TableRow
+              key={idx}
+              onClick={() => joinGame(item.id)}
+            >
               <div className="players">
-                <p>{item.count} / 6</p>
+                <p>{`${item.players}/${item.maxPlayers}`}</p>
                 <IconFive />
               </div>
               <div className="name">
